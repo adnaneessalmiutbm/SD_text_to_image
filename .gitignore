@@ -1,0 +1,48 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Training and inference outputs
+outputs/
+sd-model-finetuned/
+wandb/
+
+# Checkpoints and generated images
+**/checkpoint-*/
+**/val_images/
+**/final_images/
+**/inference_results/
+
+# Model files and large binaries
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+*.json
+
+# Temporary / cache files
+.cache/
+*.tmp
+*.temp
+*.pid
+*.lock
+*.sqlite*
+
+# Numpy arrays
+*.npy
+*.npz
+
