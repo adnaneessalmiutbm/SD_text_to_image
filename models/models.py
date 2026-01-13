@@ -15,7 +15,7 @@ from packaging import version
 from transformers import CLIPTextModel, CLIPTokenizer
 from transformers.utils import ContextManagers
 from accelerate.logging import get_logger
-
+from peft import LoraConfig, get_peft_model
 logger = get_logger(__name__, log_level="INFO")
 
 
@@ -57,6 +57,22 @@ def load_models_and_scheduler(args, accelerator):
         revision=args.non_ema_revision,
     )
 
+    lora_config = LoraConfig(
+        r=8,
+        lora_alpha=8,
+        target_modules=[
+            "to_q",
+            "to_k",
+            "to_v",
+            "to_out.0",
+        ],
+        lora_dropout=0.0,
+        bias="none",
+    )
+
+    unet = get_peft_model(unet, lora_config)
+    unet.print_trainable_parameters()
+
     # Freeze vae and text_encoder and set unet to trainable
     vae.requires_grad_(False)
     text_encoder.requires_grad_(False)
@@ -92,4 +108,5 @@ def load_models_and_scheduler(args, accelerator):
             raise ValueError("xformers is not available. Make sure it is installed correctly")
 
     return noise_scheduler, tokenizer, text_encoder, vae, unet, ema_unet
+
 

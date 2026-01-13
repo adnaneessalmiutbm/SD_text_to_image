@@ -46,3 +46,7 @@ wandb/
 *.npy
 *.npz
 
+clean.py
+extracted.log
+filter.py
+lipschitz_ratio.txt

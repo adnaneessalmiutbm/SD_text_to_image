@@ -6,8 +6,7 @@ from diffusers.utils import make_image_grid, is_wandb_available
 from accelerate.logging import get_logger
 import numpy as np
 from contextlib import nullcontext
-if is_wandb_available():
-    import wandb
+
 
 logger = get_logger(__name__, log_level="INFO")
 
@@ -56,14 +55,7 @@ def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight
             np_images = np.stack([np.asarray(img) for img in images])
             tracker.writer.add_images("validation", np_images, epoch, dataformats="NHWC")
         elif tracker.name == "wandb":
-            tracker.log(
-                {
-                    "validation": [
-                        wandb.Image(image, caption=f"{i}: {args.validation_prompts[i]}")
-                        for i, image in enumerate(images)
-                    ]
-                }
-            )
+            log_wandb_validation_images(tracker, images, args.validation_prompts)
         else:
             logger.warning(f"image logging not implemented for {tracker.name}")
 
